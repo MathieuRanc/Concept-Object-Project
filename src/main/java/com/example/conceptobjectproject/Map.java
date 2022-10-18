@@ -1,9 +1,9 @@
 package com.example.conceptobjectproject;
 
+import javafx.beans.property.DoubleProperty;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -35,7 +35,11 @@ public class Map extends Parent {
     }
     public void OnScreenResize(float width, float height)
     {
-
+        for ( var tile:  map.getChildren()) {
+            Rectangle tile1 = (Rectangle) tile;
+            tile1.setWidth(width/16);
+            tile1.setHeight(height/8);
+        }
     }
     @Override
     public Node getStyleableNode() {

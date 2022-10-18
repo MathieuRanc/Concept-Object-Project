@@ -1,6 +1,7 @@
 package com.example.conceptobjectproject;
 
 import javafx.application.Application;
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Scene;
@@ -12,6 +13,8 @@ public class GameManager extends Application {
 
     private Map _map;
 
+    public float screenWidth = 1000;
+    public float screenHeight = 562;
     @Override
     public void start(Stage stage) throws Exception {
 
@@ -19,7 +22,7 @@ public class GameManager extends Application {
             Instance=this;
 
         _map = new Map(16,8,stage);
-        Scene gameWindow = new Scene(_map.GetMap(), 1000, 562);
+        Scene gameWindow = new Scene(_map.GetMap(), screenWidth, screenHeight);
 
         SetupListener(gameWindow);
 
@@ -32,12 +35,14 @@ public class GameManager extends Application {
     {
         gameWindow.widthProperty().addListener(new ChangeListener<Number>() {
             @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) {
-                _map.OnScreenResize(10,10);
+                screenWidth=newSceneWidth.floatValue();
+                _map.OnScreenResize(screenWidth,screenHeight);
             }
         });
         gameWindow.heightProperty().addListener(new ChangeListener<Number>() {
             @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneHeight, Number newSceneHeight) {
-                System.out.println("Height: " + newSceneHeight);
+                screenHeight = newSceneHeight.floatValue();
+                _map.OnScreenResize(screenWidth,screenHeight);
             }
         });
     }
