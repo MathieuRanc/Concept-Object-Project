@@ -43,7 +43,7 @@ public class Map extends Parent {
         return map;
     }
 
-    public ArrayList<Tile> GetDirectNeighbour(Tile tile, int depth)
+    public ArrayList<Tile> GetDirectNeighbours(Tile tile, int depth)
     {
         Point2D[] posTotest = new Point2D[]{
                 new Point2D(tile.posX-1, tile.posY-1),new Point2D(tile.posX, tile.posY-1),new Point2D(tile.posX+1, tile.posY-1),
@@ -58,7 +58,7 @@ public class Map extends Parent {
             Point2D itemPos= new Point2D(item.posX, item.posY);
             for(var pos : posTotest )
             {
-                if(isOnMap(pos.getX(),pos.getY()) && itemPos.equals(pos))
+                if(itemPos.equals(pos))
                 {
                     neighbours.add(item);
                 }
@@ -66,7 +66,6 @@ public class Map extends Parent {
         }
         return neighbours;
     }
-    private boolean isOnMap(double x, double y) {return x >= 0 && y >= 0 && x < mapWidth && y < mapHeight;}
     public void OnScreenResize(float screen_width, float screen_height)
     {
         for ( var child : map.getChildren()) {
