@@ -1,13 +1,17 @@
 package com.example.conceptobjectproject;
 
-public class Being {
-    String[] messages;
+import Enums.Direction;
+
+public class Being extends SimulationObject {
+    public String[] messages;
     int energyPoints = 100;
     int maxNumberOfMessages = 20;
     int numberOfMessages = 0;
 
+    Team team;
+    Direction direction;
+
     Team getTeam() {
-        
         return team;
     }
 
@@ -16,7 +20,7 @@ public class Being {
     }
     boolean isEnemyTeam() {
 
-        return bool;
+        return true;
     }
     void move() {
 

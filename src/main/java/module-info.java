@@ -7,4 +7,6 @@ module com.example.conceptobjectproject {
 
     opens com.example.conceptobjectproject to javafx.fxml;
     exports com.example.conceptobjectproject;
+    exports Enums;
+    opens Enums to javafx.fxml;
 }

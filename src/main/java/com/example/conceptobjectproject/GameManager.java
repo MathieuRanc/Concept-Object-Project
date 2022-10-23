@@ -1,5 +1,6 @@
 package com.example.conceptobjectproject;
 
+import Enums.ZoneTypes;
 import javafx.application.Application;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.value.ChangeListener;
@@ -7,12 +8,15 @@ import javafx.beans.value.ObservableValue;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
+
 public class GameManager extends Application {
 
     public GameManager Instance;
     public int screenWidth = 1000;
     public int screenHeight = 562;
     private Map _map;
+
     @Override
     public void start(Stage stage) throws Exception {
         if(Instance !=null)
@@ -22,10 +26,20 @@ public class GameManager extends Application {
         Scene gameWindow = new Scene(_map.GetMap(), screenWidth, screenHeight);
 
         SetupListeners(gameWindow);
+        InitGame();
 
         stage.setTitle("SMA");
         stage.setScene(gameWindow);
         stage.show();
+    }
+
+    private ArrayList<MasterBeing> _masters;
+    private void InitGame() {
+        _masters = new ArrayList<>();
+        _masters.add(new MasterBeing(_map, ZoneTypes.SafeZoneTeam1));
+        _masters.add(new MasterBeing(_map, ZoneTypes.SafeZoneTeam2));
+        _masters.add(new MasterBeing(_map, ZoneTypes.SafeZoneTeam3));
+        _masters.add(new MasterBeing(_map, ZoneTypes.SafeZoneTeam4));
     }
 
     private void SetupListeners(Scene gameWindow)
