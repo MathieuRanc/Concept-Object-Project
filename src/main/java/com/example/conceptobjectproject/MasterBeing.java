@@ -7,6 +7,7 @@ public class MasterBeing extends Being {
 private Tile _actualTile;
     public MasterBeing(Map map, ZoneTypes zoneType)
     {
+        super(map);
         _actualTile = map.GetFreeRandomMapTileOfType(zoneType);
         _actualTile.SetTileObject(this,"X");
 
