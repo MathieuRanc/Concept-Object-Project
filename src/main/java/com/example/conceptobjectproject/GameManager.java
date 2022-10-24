@@ -19,10 +19,11 @@ public class GameManager extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
+
         if(Instance !=null)
             Instance=this;
 
-        _map = new Map(16,9,screenWidth,screenHeight);
+        _map = new Map(20,12,screenWidth,screenHeight);
         Scene gameWindow = new Scene(_map.GetMap(), screenWidth, screenHeight);
 
         SetupListeners(gameWindow);

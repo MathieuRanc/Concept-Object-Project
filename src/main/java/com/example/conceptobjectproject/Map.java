@@ -6,6 +6,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
@@ -81,12 +82,14 @@ public class Map extends Parent {
     public void OnScreenResize(float screen_width, float screen_height)
     {
         for ( var child : map.getChildren()) {
-            Rectangle tile = (Rectangle) child;
+            StackPane tile = (StackPane) child;
 
-            if ( tile == null) return;
+            Rectangle rect = (Rectangle) tile.getChildren().get(0);
 
-            tile.setWidth(screen_width/(mapWidth+1));
-            tile.setHeight(screen_height/(mapHeight+1));
+            if ( rect == null) return;
+
+            rect.setWidth(screen_width/(mapWidth+1));
+            rect.setHeight(screen_height/(mapHeight+1));
         }
     }
     @Override
