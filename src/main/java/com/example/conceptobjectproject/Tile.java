@@ -3,6 +3,9 @@ import Enums.ZoneTypes;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
 public class Tile {
@@ -48,7 +51,7 @@ public class Tile {
         if(zoneType.equals(ZoneTypes.Neutral)) return Color.LIGHTGREY;
 
         if(zoneType.equals(ZoneTypes.SafeZoneTeam1))
-            return Color.INDIANRED;
+            return Color.LIGHTCORAL;
         if(zoneType.equals(ZoneTypes.SafeZoneTeam2))
             return Color.PALEVIOLETRED;
         if(zoneType.equals(ZoneTypes.SafeZoneTeam3))
@@ -61,10 +64,9 @@ public class Tile {
     {
         return object;
     }
-    public void SetTileObject(SimulationObject object, String symbol)
+    public void SetTileObject(SimulationObject object)
     {
-        Text t =new Text(symbol);
-        tilePane.getChildren().add(t);
+        tilePane.getChildren().add(object.obj);
         this.object = object;
     }
     public int getPosY() {

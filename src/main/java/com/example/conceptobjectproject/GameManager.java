@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class GameManager extends Application {
 
-    public GameManager Instance;
+    public static GameManager Instance;
     public int screenWidth = 1000;
     public int screenHeight = 562;
     private Map _map;
@@ -41,6 +41,14 @@ public class GameManager extends Application {
         _masters.add(new MasterBeing(_map, ZoneTypes.SafeZoneTeam2));
         _masters.add(new MasterBeing(_map, ZoneTypes.SafeZoneTeam3));
         _masters.add(new MasterBeing(_map, ZoneTypes.SafeZoneTeam4));
+
+        GenerateObstacles(10);
+    }
+
+    private void GenerateObstacles(int i) {
+        for (int j = 0; j < i ; j++) {
+            new Obstacle(_map,ZoneTypes.Neutral);
+        }
     }
 
     private void SetupListeners(Scene gameWindow)

@@ -1,6 +1,12 @@
 package com.example.conceptobjectproject;
 import Enums.Direction;
 
+import Enums.ZoneTypes;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+
 public class CommonBeing extends Being {
     private int energyPoints = 100;
     private int maxNumberOfMessages = 20;
@@ -8,9 +14,19 @@ public class CommonBeing extends Being {
     private int x = 0;
     private int y = 0;
 
-    public CommonBeing(Map map) {
+    public CommonBeing(Map map, ZoneTypes zoneType)
+    {
         super(map);
+
+        Text t = new Text("I");
+        t.setFont(Font.font(null, FontWeight.BOLD, 20));
+        t.setFill(zoneType.beingsColor);
+        obj = t;
+
+        _actualTile = map.GetFreeRandomMapTileOfType(zoneType);
+        _actualTile.SetTileObject(this);
     }
+    
     Team team;
     Direction direction;
 
@@ -58,5 +74,8 @@ public class CommonBeing extends Being {
     private Direction getLastTakenDirection() {
 
         return direction;
-    }
+
+    private final Tile _actualTile;
+
+    
 }
