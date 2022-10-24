@@ -74,8 +74,5 @@ public class CommonBeing extends Being {
     private Direction getLastTakenDirection() {
 
         return direction;
-
-    private final Tile _actualTile;
-
-    
+    }
 }

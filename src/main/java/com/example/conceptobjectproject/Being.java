@@ -5,8 +5,9 @@ import Enums.ZoneTypes;
 
 public class Being extends SimulationObject {
 
-    private final Map _map;
-    private final ZoneTypes _team;
+    protected final Map _map;
+    protected final ZoneTypes _team;
+    protected Tile _actualTile;
 
     public String[] messages;
     int energyPoints = 100;
