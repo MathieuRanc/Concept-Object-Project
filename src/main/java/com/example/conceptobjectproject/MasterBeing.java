@@ -19,7 +19,7 @@ public class MasterBeing extends Being {
         Text t = new Text("X");
         t.setFont(Font.font(null, FontWeight.BOLD, 20));
         t.setFill(zoneType.beingsColor);
-        obj = t;
+        graphObj = t;
 
         _actualTile = map.GetFreeRandomMapTileOfType(zoneType);
         _actualTile.SetTileObject(this);

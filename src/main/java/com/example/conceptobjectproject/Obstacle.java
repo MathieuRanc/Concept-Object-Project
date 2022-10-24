@@ -12,10 +12,10 @@ public class Obstacle extends SimulationObject{
     {
         Rectangle rect = new Rectangle();
         StackPane child = (StackPane) map.GetMap().getChildren().get(0);
-        rect.widthProperty().bind(child.widthProperty().subtract(5));
+        rect.widthProperty().bind(child.widthProperty().subtract(10));
         rect.heightProperty().bind(child.heightProperty().subtract(5));
         rect.setFill(Color.BLACK);
-        obj = rect;
+        graphObj = rect;
 
         _actualTile = map.GetFreeRandomMapTileOfType(zoneType);
         _actualTile.SetTileObject(this);

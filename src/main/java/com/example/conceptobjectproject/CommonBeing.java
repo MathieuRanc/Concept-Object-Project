@@ -13,6 +13,8 @@ public class CommonBeing extends Being {
     private int numberOfMessages = 0;
     private int x = 0;
     private int y = 0;
+    private Team team;
+    private Direction direction;
 
     public CommonBeing(Map map, ZoneTypes zoneType)
     {
@@ -21,14 +23,11 @@ public class CommonBeing extends Being {
         Text t = new Text("I");
         t.setFont(Font.font(null, FontWeight.BOLD, 20));
         t.setFill(zoneType.beingsColor);
-        obj = t;
+        graphObj = t;
 
         _actualTile = map.GetFreeRandomMapTileOfType(zoneType);
         _actualTile.SetTileObject(this);
     }
-    
-    Team team;
-    Direction direction;
 
     Team getTeam() {
         return team;

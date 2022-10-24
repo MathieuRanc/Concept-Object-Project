@@ -66,7 +66,7 @@ public class Tile {
     }
     public void SetTileObject(SimulationObject object)
     {
-        tilePane.getChildren().add(object.obj);
+        tilePane.getChildren().add(object.graphObj);
         this.object = object;
     }
     public int getPosY() {
