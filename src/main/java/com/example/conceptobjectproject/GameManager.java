@@ -35,6 +35,7 @@ public class GameManager extends Application {
     }
 
     private ArrayList<MasterBeing> _masters;
+    private ArrayList<Obstacle> _obstacles;
     private void InitGame() {
         _masters = new ArrayList<>();
         _masters.add(new MasterBeing(_map, ZoneTypes.SafeZoneTeam1));
@@ -46,8 +47,9 @@ public class GameManager extends Application {
     }
 
     private void GenerateObstacles(int i) {
+        _obstacles = new ArrayList<>();
         for (int j = 0; j < i ; j++) {
-            new Obstacle(_map,ZoneTypes.Neutral);
+            _obstacles.add(new Obstacle(_map,ZoneTypes.Neutral));
         }
     }
 

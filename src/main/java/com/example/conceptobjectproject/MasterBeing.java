@@ -14,7 +14,7 @@ public class MasterBeing extends Being {
     protected Tile _actualTile;
     public MasterBeing(Map map, ZoneTypes zoneType)
     {
-        super(map);
+        super(map,zoneType);
 
         Text t = new Text("X");
         t.setFont(Font.font(null, FontWeight.BOLD, 20));

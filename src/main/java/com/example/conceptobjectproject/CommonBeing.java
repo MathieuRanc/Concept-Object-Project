@@ -16,7 +16,7 @@ public class CommonBeing extends Being {
 
     public CommonBeing(Map map, ZoneTypes zoneType)
     {
-        super(map);
+        super(map,zoneType);
 
         Text t = new Text("I");
         t.setFont(Font.font(null, FontWeight.BOLD, 20));
