@@ -56,7 +56,7 @@ public class Map extends Parent {
         return arr.get(random.nextInt(arr.size())) ;
     }
 
-    public ArrayList<Tile> GetDirectNeighbours(Tile tile, int depth)
+    public ArrayList<Tile> GetDirectNeighbours(Tile tile)
     {
         Point2D[] posTotest = new Point2D[]{
                 new Point2D(tile.getPosX()-1, tile.getPosY()-1),new Point2D(tile.getPosX(), tile.getPosY()-1),new Point2D(tile.getPosX()+1, tile.getPosY()-1),
@@ -78,6 +78,22 @@ public class Map extends Parent {
             }
         }
         return neighbours;
+    }
+    public Tile GetDirectNeighbour(Tile tile, Point2D relativNeighbour)
+    {
+
+        Point2D posToTest = new Point2D(tile.getPosX()+relativNeighbour.getX(), tile.getPosY()+relativNeighbour.getY());
+
+        for(var item: mapTiles )
+        {
+            Point2D itemPos= new Point2D(item.getPosX(), item.getPosY());
+
+            if(itemPos.equals(posToTest))
+            {
+                return item;
+            }
+        }
+        return null;
     }
     public void OnScreenResize(float screen_width, float screen_height)
     {

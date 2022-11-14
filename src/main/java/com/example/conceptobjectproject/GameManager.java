@@ -49,7 +49,7 @@ public class GameManager extends Application {
     private void GenerateObstacles(int i) {
         _obstacles = new ArrayList<>();
         for (int j = 0; j < i ; j++) {
-            _obstacles.add(new Obstacle(_map,ZoneTypes.Neutral));
+            _obstacles.add(new Obstacle(_map));
         }
     }
 

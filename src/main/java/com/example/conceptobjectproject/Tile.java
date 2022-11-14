@@ -1,5 +1,6 @@
 package com.example.conceptobjectproject;
 import Enums.ZoneTypes;
+import javafx.geometry.Point2D;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -64,10 +65,11 @@ public class Tile {
     {
         return object;
     }
-    public void SetTileObject(SimulationObject object)
+    public void SetTileObject(SimulationObject object,ZoneTypes zoneType)
     {
         tilePane.getChildren().add(object.graphObj);
         this.object = object;
+        this.zoneType = zoneType;
     }
     public int getPosY() {
         return posY;

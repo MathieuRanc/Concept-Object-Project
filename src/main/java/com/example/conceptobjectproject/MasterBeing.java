@@ -18,11 +18,14 @@ public class MasterBeing extends Being {
 
         Text t = new Text("X");
         t.setFont(Font.font(null, FontWeight.BOLD, 20));
-        t.setFill(zoneType.beingsColor);
+        t.setFill(zoneType.objectColor);
+
+        //Setting simulationobject data
         graphObj = t;
+        objectType= zoneType;
 
         _actualTile = map.GetFreeRandomMapTileOfType(zoneType);
-        _actualTile.SetTileObject(this);
+        _actualTile.SetTileObject(this,zoneType);
 
         for (int i = 0; i < 3; i++) {
             commonBeings.add(new CommonBeing(map,zoneType));

@@ -8,16 +8,19 @@ import javafx.scene.shape.Rectangle;
 public class Obstacle extends SimulationObject{
 
     private final Tile _actualTile;
-    public Obstacle(Map map, ZoneTypes zoneType)
+    public Obstacle(Map map)
     {
         Rectangle rect = new Rectangle();
         StackPane child = (StackPane) map.GetMap().getChildren().get(0);
         rect.widthProperty().bind(child.widthProperty().subtract(10));
         rect.heightProperty().bind(child.heightProperty().subtract(5));
         rect.setFill(Color.BLACK);
-        graphObj = rect;
 
-        _actualTile = map.GetFreeRandomMapTileOfType(zoneType);
-        _actualTile.SetTileObject(this);
+        //SimulationObject data
+        graphObj = rect;
+        objectType = ZoneTypes.Obstacle;
+
+        _actualTile = map.GetFreeRandomMapTileOfType(ZoneTypes.Neutral);
+        _actualTile.SetTileObject(this, ZoneTypes.Obstacle);
     }
 }
