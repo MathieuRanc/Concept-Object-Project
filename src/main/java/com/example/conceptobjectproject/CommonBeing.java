@@ -95,13 +95,34 @@ public class CommonBeing extends Being {
                         var meetedBeing = (Being)tileToTest.GetTileObject();
                         if(meetedBeing.isEnnemy(this))//EnnemyTeam
                         {
-                            //TODO:PierreFeuilleCiseaux
+                            //fight
+                            Random isWin = new Random();
+                            if(isWin.nextBoolean())
+                            {   // you win a random number of messages from your opponent
+                                for( int j = 0; j < new Random().nextInt(meetedBeing.messages.size())+1; j++)
+                                {
+                                    if(messages.size() < maxNumberOfMessages)
+                                    {
+                                        messages.add(meetedBeing.messages.get(j));
+                                    }
+                                }
+                                removeDuplicates(messages);
+                                DecreaseEP(moveDist - i);
+                            }
+                            else
+                            {
+                                lastTile = movementTile;
+                                movementTile = tileToTest;
+                            }
                         }
                         else //equipe alliée
                         {
                             if (meetedBeing instanceof MasterBeing) { //isMaster
                                 MasterBeing masterBeing = (MasterBeing) meetedBeing;
-                                //TODO:gerer isMaster
+                                //isMaster
+                                masterBeing.messages.addAll(messages);
+                                removeDuplicates(masterBeing.messages);
+                                messages.clear();
                             }
                             else //isCommon
                             {
@@ -119,6 +140,16 @@ public class CommonBeing extends Being {
         _actualTile.SetTileObject(this, objectType);
     }
 
+    private void removeDuplicates(ArrayList<String> messages) {
+        for (int i = 0; i < messages.size(); i++) {
+            for (int j = i+1; j < messages.size(); j++) {
+                if(messages.get(i).equals(messages.get(j)))
+                {
+                    messages.remove(j);
+                }
+            }
+        }
+    }
     private void increaseEP()
     {}
     private void DecreaseEP(int amount)
