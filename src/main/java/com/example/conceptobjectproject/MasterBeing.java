@@ -6,13 +6,14 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class MasterBeing extends Being {
 
     private ArrayList<CommonBeing> commonBeings = new ArrayList<>();
 
     protected Tile _actualTile;
-    public MasterBeing(Map map, ZoneTypes zoneType)
+    public MasterBeing(Map map, ZoneTypes zoneType, String[] messageOfCommons)
     {
         super(map,zoneType);
 
@@ -28,8 +29,19 @@ public class MasterBeing extends Being {
         _actualTile.SetTileObject(this,zoneType);
 
         for (int i = 0; i < 3; i++) {
-            commonBeings.add(new CommonBeing(map,zoneType));
+            commonBeings.add(new CommonBeing(this,map,zoneType,messageOfCommons[i]));
         }
+    }
 
+    public ArrayList<CommonBeing> GetCommonBeings()
+    {
+        Collections.shuffle(commonBeings);
+        return commonBeings;
+    }
+
+    public void ChangeCommonBeingToObstacle(CommonBeing commonBeing, Tile tile)
+    {
+        commonBeings.remove(commonBeing);
+        new Obstacle(tile,_map);
     }
 }

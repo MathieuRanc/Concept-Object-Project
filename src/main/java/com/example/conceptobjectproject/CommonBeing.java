@@ -2,15 +2,12 @@ package com.example.conceptobjectproject;
 import Enums.Direction;
 
 import Enums.ZoneTypes;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Random;
-import java.util.stream.Stream;
 
 public class CommonBeing extends Being {
     private int energyPoints = 100;
@@ -18,16 +15,17 @@ public class CommonBeing extends Being {
     private int numberOfMessages = 0;
     private int x = 0;
     private int y = 0;
-    private Team team;
     private Direction direction;
+    private MasterBeing _master;
 
-    private int _maxEnergyPoints = 100;
-    private int _energyPointspLosingStep = 2;
-    private int _energyPoints ;
+    private float _maxEnergyPoints = 100;
+    private float _energyPointspLosingStep = 1;
+    private float _energyPoints ;
 
-    public CommonBeing(Map map, ZoneTypes zoneType)
+    public CommonBeing(MasterBeing master ,Map map, ZoneTypes zoneType, String initMessage)
     {
         super(map,zoneType);
+        messages.add(initMessage);
 
         Text t = new Text("I");
         t.setFont(Font.font(null, FontWeight.BOLD, 20));
@@ -36,36 +34,28 @@ public class CommonBeing extends Being {
         objectType = zoneType;
 
         _energyPoints = _maxEnergyPoints;
-
+        _master = master;
         _actualTile = map.GetFreeRandomMapTileOfType(zoneType);
         _actualTile.SetTileObject(this,zoneType);
     }
-
-    Team getTeam() {
-        return team;
-    }
-
-    
-
-    void setTeam(Team team) {
-
-    }
-    boolean isEnemyTeam() {
-
-        return true;
-    }
-    void move() {
+    void move()  {
         Random random = new Random();
+        _actualTile.RemoveTileObject(this);
         Tile movementTile = _actualTile;
         Tile lastTile = _actualTile;
 
+
         //LetsMove
         int moveDist =random.nextInt(5)+1;
+        boolean movementCanceled = false;
         for (int i = 0; i < moveDist; i++)
         {
-            while(true)
+            int overrideTest= 0;
+            while(overrideTest<50)
             {
-                Direction rndDirection = Direction.GetRandomDirection();
+                overrideTest++;
+
+                Direction rndDirection = _energyPoints/_maxEnergyPoints < 0.2f ? Direction.GetOrientedDirection(_master._actualTile,movementTile):Direction.GetRandomDirection();
                 Tile tileToTest = _map.GetDirectNeighbour(movementTile,rndDirection.relativPos);
 
                 if(lastTile == tileToTest || tileToTest == null) {
@@ -77,53 +67,90 @@ public class CommonBeing extends Being {
                     if(tileToTest.zoneType == ZoneTypes.Neutral || tileToTest.zoneType == objectType)
                     {
                         lastTile = movementTile;
+
                         movementTile = tileToTest;
                     }
                     else
                     {
                         DecreaseEP(moveDist - i);
+                        movementCanceled = true;
                     }
-                    break;
-                }
 
-                switch(tileToTest.GetTileObject().objectType)
+                }
+                else
                 {
-                    case Obstacle:
-                        DecreaseEP(moveDist - i);
-                        break;
-                    default:
-                        var meetedBeing = (Being)tileToTest.GetTileObject();
-                        if(meetedBeing.isEnnemy(this))//EnnemyTeam
-                        {
-                            //TODO:PierreFeuilleCiseaux
-                        }
-                        else //equipe alliée
-                        {
-                            if (meetedBeing instanceof MasterBeing) { //isMaster
-                                MasterBeing masterBeing = (MasterBeing) meetedBeing;
-                                //TODO:gerer isMaster
-                            }
-                            else //isCommon
+                    movementCanceled = true ;
+                    switch(tileToTest.GetTileObject().objectType)
+                    {
+                        case Obstacle:
+                            DecreaseEP(moveDist - i);
+                            break;
+                        default:
+                            var meetedBeing = (Being)tileToTest.GetTileObject();
+                            if(meetedBeing.isEnnemy(this))//EnnemyTeam
                             {
-                                CommonBeing commonBeing = (CommonBeing) meetedBeing;
-                                messages = commonBeing.ExchangeMessages(messages, meetedBeing.objectType == this.objectType? 0 : random.nextInt(2));
+                                //TODO:PierreFeuilleCiseaux
                             }
-                        }
-                        break;
+                            else //equipe alliée
+                            {
+                                if (meetedBeing instanceof MasterBeing) { //isMaster
+                                    MasterBeing masterBeing = (MasterBeing) meetedBeing;
+                                    //TODO:gerer isMaster
+                                }
+                                else //isCommon
+                                {
+                                    CommonBeing commonBeing = (CommonBeing) meetedBeing;
+                                    messages = commonBeing.ExchangeMessages(messages, meetedBeing.objectType == this.objectType? 0 : random.nextInt(2));
+                                }
+                            }
+                            break;
+                    }
                 }
                 break;
             }
+
+            if(movementTile.zoneType == objectType)
+                IncreaseEP(5);
+
+            if(movementCanceled)
+            {
+                if(!stillEnergy(movementTile))
+                {
+                    return;
+                }
+                break;
+            }
+
+            DecreaseEP(1);
+            if(!stillEnergy(movementTile))
+            {
+                return;
+            }
         }
+
         //movement done
         _actualTile = movementTile;
         _actualTile.SetTileObject(this, objectType);
     }
 
-    private void increaseEP()
-    {}
+    private void IncreaseEP(int amount)
+    {
+        if(_energyPoints <= (_maxEnergyPoints - (amount)*_energyPointspLosingStep))
+            _energyPoints += amount*_energyPointspLosingStep;
+    }
     private void DecreaseEP(int amount)
     {
-        _energyPoints -= (amount)*_energyPointspLosingStep;
+        _energyPoints -= amount*_energyPointspLosingStep;
+    }
+
+    private boolean stillEnergy(Tile actualtile)
+    {
+        if(_energyPoints < 0)
+        {
+            _master.ChangeCommonBeingToObstacle(this, actualtile);
+            return false;
+        }
+        return true;
     }
     private ArrayList<String> ExchangeMessages(ArrayList<String> messages, int amount)
     {

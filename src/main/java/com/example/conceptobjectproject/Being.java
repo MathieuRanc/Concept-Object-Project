@@ -18,10 +18,6 @@ public class Being extends SimulationObject {
     private int maxNumberOfMessages = 20;
     private int numberOfMessages = 0;
 
-
-
-
-    Team team;
     Direction direction;
     public Being(Map map,ZoneTypes zoneType){
         _map =map;

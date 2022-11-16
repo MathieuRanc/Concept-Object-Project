@@ -81,7 +81,6 @@ public class Map extends Parent {
     }
     public Tile GetDirectNeighbour(Tile tile, Point2D relativNeighbour)
     {
-
         Point2D posToTest = new Point2D(tile.getPosX()+relativNeighbour.getX(), tile.getPosY()+relativNeighbour.getY());
 
         for(var item: mapTiles )

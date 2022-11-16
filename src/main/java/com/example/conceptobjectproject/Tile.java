@@ -13,6 +13,7 @@ public class Tile {
 
     private int posX;
     private int posY;
+    private ZoneTypes baseZoneType;
     public ZoneTypes zoneType;
     public StackPane tilePane;
     private SimulationObject object;
@@ -21,6 +22,7 @@ public class Tile {
         this.posX = posX;
         this.posY = posY;
         this.zoneType = GetTileZoneType(mapWidth,mapHeight);
+        baseZoneType= this.zoneType;
         this.object = null;
 
         tilePane = new StackPane();
@@ -71,11 +73,18 @@ public class Tile {
         this.object = object;
         this.zoneType = zoneType;
     }
+    public void RemoveTileObject(SimulationObject object)
+    {
+        tilePane.getChildren().remove(object.graphObj);
+        this.object = null;
+        this.zoneType = baseZoneType;
+    }
     public int getPosY() {
         return posY;
     }
     public int getPosX() {
         return posX;
     }
+
 
 }
