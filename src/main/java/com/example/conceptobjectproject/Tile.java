@@ -1,19 +1,13 @@
 package com.example.conceptobjectproject;
 import Enums.ZoneTypes;
-import javafx.geometry.Point2D;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontPosture;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
 
 public class Tile {
-
-    private int posX;
-    private int posY;
-    private ZoneTypes baseZoneType;
+    private final int posX;
+    private final int posY;
+    private final ZoneTypes baseZoneType;
     public ZoneTypes zoneType;
     public StackPane tilePane;
     private SimulationObject object;

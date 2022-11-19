@@ -8,8 +8,9 @@ import javafx.scene.shape.Rectangle;
 public class Obstacle extends SimulationObject{
 
     private final Tile _actualTile;
-    public Obstacle(Map map)
+    public Obstacle()
     {
+        Map map = Map.GetInstance();
         Rectangle rect = new Rectangle();
         StackPane child = (StackPane) map.GetMap().getChildren().get(0);
         rect.widthProperty().bind(child.widthProperty().subtract(10));

@@ -3,50 +3,44 @@ package com.example.conceptobjectproject;
 import Enums.ZoneTypes;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Iterator;
 
 public class GameManager extends Application {
 
-    public int screenWidth = 1000;
-    public int screenHeight = 562;
-    private Map _map;
+    private int screenWidth = 1000;
+    private int screenHeight = 562;
 
-    private String[] allGameMessages = {"YtgItpWJhf",
-            "EBAKgrDrGd",
-            "VeHWdxjzay",
-            "CiMTQiYRpi",
-            "vhkzTYnBoQ",
-            "maBIeeyYtx",
-            "igZSHLSRZH",
-            "SRbxdxxAZs",
-            "qnlAMmWYHs",
-            "DneagCzVaF",
-            "FdalJWtwMa",
-            "tjaqCKmisk",};
+    private int _maxNumbreOfGameSteps = 600;
 
-    private ArrayList<MasterBeing> _masters;
+    private final String[] allGamePokemons = {
+            "Charmander", "Charmeleon", "Charizard", "Camerupt", "Emboar", "Vulpix", "Ninetales", "Ponyta", "Magmar",
+            "Squirtle", "Wartotle", "Blastoise", "Psyduck", "Golduck", "Seel", "Crabby", "Horsea", "Seadra",
+            "Bulbasaur", "Victreebel", "Bellossom", "Cacturne", "Tropius", "Lileep", "Cherrim", "Carnivine", "Sunflora",
+            "Pikachu","Raichu", "Jolteon", "Mareep", "Flaaffy", "Ampharos", "Elekid", "Minun", "Shinx"
+    };
+
+    private ArrayList<MasterTrainer> _masters;
     @Override
-    public void start(Stage stage) throws Exception {
-        stage.setTitle("SMA");
+    public void start(Stage stage) {
+        stage.setTitle("Pokemon SMA");
 
-        _map = new Map(20,12,screenWidth,screenHeight);
-        Scene gameWindow = new Scene(_map.GetMap(), screenWidth, screenHeight);
+        Map.GetInstance(20,12,screenWidth,screenHeight);
+        Scene gameWindow = new Scene(Map.GetInstance().GetMap(), screenWidth, screenHeight);
         stage.setScene(gameWindow);
 
         SetupListeners(gameWindow);
         InitGame();
 
+
         new AnimationTimer()
         {
             private long lastUpdate = 0 ;
+            int gameStep =0;
             public void handle(long now)
             {
                 if (now - lastUpdate >= 1000_000_000) {
@@ -54,15 +48,21 @@ public class GameManager extends Application {
                     Collections.shuffle(_masters);
                     for(var master : _masters)
                     {
-                        if(master.messages.toArray() == allGameMessages) // test end of the game
+                        if(  master.pokemons.containsAll(new ArrayList<>(Arrays.asList(allGamePokemons)))) // test end of the game
                             stage.close();
 
-                        Iterator<CommonBeing> commons = master.GetCommonBeings().iterator();
-                        while (commons.hasNext()) {
-                            commons.next().move();
+
+                        ArrayList<CommonTrainer> commons = new ArrayList<>(master.GetCommonTrainers());
+                        for(var common:commons)
+                        {
+                            common.move();
                         }
 
                     }
+
+                    gameStep++;
+                    if(gameStep>_maxNumbreOfGameSteps)//If game trop dure à finir on fini de force
+                        stage.close();
 
                     lastUpdate = now ;
                 }
@@ -76,17 +76,17 @@ public class GameManager extends Application {
     private void InitGame() {
 
         _masters = new ArrayList<>();
-        _masters.add(new MasterBeing("Master1",_map, ZoneTypes.SafeZoneTeam1, Arrays.copyOfRange(allGameMessages, 0, 3)));
-        _masters.add(new MasterBeing("Master2",_map, ZoneTypes.SafeZoneTeam2, Arrays.copyOfRange(allGameMessages, 3, 6)));
-        _masters.add(new MasterBeing("Master3",_map, ZoneTypes.SafeZoneTeam3, Arrays.copyOfRange(allGameMessages, 6, 9)));
-        _masters.add(new MasterBeing("Master4",_map, ZoneTypes.SafeZoneTeam4, Arrays.copyOfRange(allGameMessages, 9, 12)));
+        _masters.add(new MasterTrainer("Master1", ZoneTypes.SafeZoneTeam1, Arrays.copyOfRange(allGamePokemons, 0, 9)));
+        _masters.add(new MasterTrainer("Master2", ZoneTypes.SafeZoneTeam2, Arrays.copyOfRange(allGamePokemons, 9, 18)));
+        _masters.add(new MasterTrainer("Master3", ZoneTypes.SafeZoneTeam3, Arrays.copyOfRange(allGamePokemons, 18, 27)));
+        _masters.add(new MasterTrainer("Master4", ZoneTypes.SafeZoneTeam4, Arrays.copyOfRange(allGamePokemons, 27, 36)));
 
         GenerateObstacles(10);
     }
 
     private void GenerateObstacles(int i) {
         for (int j = 0; j < i ; j++) {
-            new Obstacle(_map);
+            new Obstacle();
         }
     }
 
@@ -94,12 +94,12 @@ public class GameManager extends Application {
     {
         gameWindow.widthProperty().addListener((observableValue, oldSceneWidth, newSceneWidth) -> {
             screenWidth = newSceneWidth.intValue();
-            _map.OnScreenResize(screenWidth, screenHeight);
+            Map.GetInstance().OnScreenResize(screenWidth, screenHeight);
         });
 
         gameWindow.heightProperty().addListener((observableValue, oldSceneHeight, newSceneHeight) -> {
             screenHeight = newSceneHeight.intValue();
-            _map.OnScreenResize(screenWidth,screenHeight);
+            Map.GetInstance().OnScreenResize(screenWidth,screenHeight);
         });
     }
     public static void main(String[] args) {

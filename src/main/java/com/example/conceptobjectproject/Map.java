@@ -17,12 +17,34 @@ import java.util.stream.Collectors;
 
 public class Map extends Parent {
 
-    private GridPane map;
-    private int mapWidth;
-    private int mapHeight;
+    private static Map Instance;
 
-    private ArrayList<Tile> mapTiles;
-    public Map(int mapWidth, int mapHeight, int screenWidth, int screenHeight)
+    public static Map GetInstance(int mapWidth, int mapHeight, int screenWidth, int screenHeight)
+    {
+        if(Instance == null)
+        {
+            Instance=new Map(mapWidth, mapHeight, screenWidth, screenHeight);
+            return Instance;
+        }
+
+        return Instance;
+    }
+    public static Map GetInstance()
+    {
+        if(Instance == null)
+        {
+            System.out.println("Error: no instance of the map existing");
+            return null;
+        }
+
+        return Instance;
+    }
+    private final GridPane map;
+    private final int mapWidth;
+    private final int mapHeight;
+
+    private final ArrayList<Tile> mapTiles;
+    private Map(int mapWidth, int mapHeight, int screenWidth, int screenHeight)
     {
         this.mapWidth = mapWidth;
         this.mapHeight = mapHeight;
@@ -56,29 +78,6 @@ public class Map extends Parent {
         return arr.get(random.nextInt(arr.size())) ;
     }
 
-    public ArrayList<Tile> GetDirectNeighbours(Tile tile)
-    {
-        Point2D[] posTotest = new Point2D[]{
-                new Point2D(tile.getPosX()-1, tile.getPosY()-1),new Point2D(tile.getPosX(), tile.getPosY()-1),new Point2D(tile.getPosX()+1, tile.getPosY()-1),
-                new Point2D(tile.getPosX()-1, tile.getPosY()),new Point2D(tile.getPosX(), tile.getPosY()),new Point2D(tile.getPosX()+1, tile.getPosY()),
-                new Point2D(tile.getPosX()-1, tile.getPosY()+1),new Point2D(tile.getPosX(), tile.getPosY()+1),new Point2D(tile.getPosX()+1, tile.getPosY()+1),
-        };
-
-        ArrayList<Tile> neighbours = new ArrayList<Tile>();
-
-        for(var item: mapTiles )
-        {
-            Point2D itemPos= new Point2D(item.getPosX(), item.getPosY());
-            for(var pos : posTotest )
-            {
-                if(itemPos.equals(pos))
-                {
-                    neighbours.add(item);
-                }
-            }
-        }
-        return neighbours;
-    }
     public Tile GetDirectNeighbour(Tile tile, Point2D relativNeighbour)
     {
         Point2D posToTest = new Point2D(tile.getPosX()+relativNeighbour.getX(), tile.getPosY()+relativNeighbour.getY());

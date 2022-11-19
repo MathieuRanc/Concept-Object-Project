@@ -2,7 +2,6 @@ package Enums;
 
 import com.example.conceptobjectproject.Tile;
 import javafx.geometry.Point2D;
-import javafx.scene.paint.Color;
 
 import java.util.Random;
 
@@ -16,8 +15,8 @@ public enum Direction {
     SouthEast(1,-1),
     SouthWest(-1,-1);
 
-    public Point2D relativPos;
-    private Direction(int x, int y)
+    public final Point2D relativPos;
+    Direction(int x, int y)
     {
         this.relativPos = new Point2D(x,y);
     }
