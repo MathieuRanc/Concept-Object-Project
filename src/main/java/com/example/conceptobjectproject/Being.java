@@ -49,9 +49,24 @@ public class Being extends SimulationObject {
         }
 
     }
-    public void Move()
+    protected void TakeMessage(Being other,int amount, boolean delete)
     {
+        Random random = new Random();
 
+        int count =0;
+        while(count< amount)
+        {
+            String newMessage = other.messages.get(random.nextInt(other.messages.size()));
+            if(!this.messages.contains(newMessage))
+            {
+                this.messages.add(newMessage);
+
+                if(delete)
+                    other.messages.remove(newMessage);
+
+                count++;
+            }
+        }
     }
 
 

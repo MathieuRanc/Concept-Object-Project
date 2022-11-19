@@ -74,7 +74,6 @@ public class CommonBeing extends Being {
                     }
                     else
                     {
-                        DecreaseEP(moveDist - i);
                         movementCanceled = true;
                     }
 
@@ -85,7 +84,6 @@ public class CommonBeing extends Being {
                     switch(tileToTest.GetTileObject().objectType)
                     {
                         case Obstacle:
-                            DecreaseEP(moveDist - i);
                             break;
                         default:
                             var meetedBeing = (Being)tileToTest.GetTileObject();
@@ -93,37 +91,26 @@ public class CommonBeing extends Being {
                             {
                                 //Combat si ennemie
 
-                                if(random.nextBoolean())
-                                {   // you win a random number of messages from your opponent
-                                    for( int j = 0; j < new Random().nextInt(meetedBeing.messages.size())+1; j++)
-                                    {
-                                        if(messages.size() < maxNumberOfMessages)
-                                        {
-                                            messages.add(meetedBeing.messages.get(j));
-                                        }
-                                    }
-                                    removeDuplicates(messages);
-                                    DecreaseEP(moveDist - i);
+                                if(random.nextBoolean()) // test if win battle
+                                {   // if win : you win a random number of messages from your opponent
+                                    TakeMessage(meetedBeing,random.nextInt(meetedBeing.messages.size()-1)+1,true);
                                 }
-                                else
+                                else// if loose : your opponent win a random number of messages
                                 {
-                                    lastTile = movementTile;
-                                    movementTile = tileToTest;
+                                    meetedBeing.TakeMessage(this,random.nextInt(this.messages.size()-1)+1,true);
                                 }
                             }
                             else //equipe alliée
                                 {
                                     if (meetedBeing instanceof MasterBeing) { //isMaster
-                                        MasterBeing masterBeing = (MasterBeing) meetedBeing;
-                                                                        //isMaster
-                                        masterBeing.messages.addAll(messages);
-                                        removeDuplicates(masterBeing.messages);
-                                        messages.clear();
+                                        meetedBeing.TakeMessage(this,messages.size(),false);
                                     }
                                     else //isCommon
                                     {
-                                        CommonBeing commonBeing = (CommonBeing) meetedBeing;
-                                        messages = commonBeing.ExchangeMessages(this, meetedBeing.objectType == this.objectType? 0 : random.nextInt(2));
+                                        //int randomNbrOfmsg = random.nextInt(messages.size() <= meetedBeing.messages.size()? messages.size():meetedBeing.messages.size());
+                                        int randomNbrOfmsg =random.nextInt(2);
+                                        meetedBeing.TakeMessage(this,meetedBeing.objectType == this.objectType? messages.size() : randomNbrOfmsg,false);
+                                        TakeMessage(meetedBeing,meetedBeing.objectType == this.objectType? meetedBeing.messages.size() : randomNbrOfmsg,false);
                                     }
                                 }
                             break;
@@ -137,13 +124,13 @@ public class CommonBeing extends Being {
 
             if(movementCanceled)
             {
+                DecreaseEP(moveDist - i);
                 if(!stillEnergy(movementTile))
                 {
                     return;
                 }
                 break;
             }
-
             DecreaseEP(1);
             if(!stillEnergy(movementTile))
             {
@@ -154,17 +141,6 @@ public class CommonBeing extends Being {
         //movement done
         _actualTile = movementTile;
         _actualTile.SetTileObject(this, objectType);
-    }
-
-    private void removeDuplicates(ArrayList<String> messages) {
-        for (int i = 0; i < messages.size(); i++) {
-            for (int j = i+1; j < messages.size(); j++) {
-                if(messages.get(i).equals(messages.get(j)))
-                {
-                    messages.remove(j);
-                }
-            }
-        }
     }
 
     private void IncreaseEP(int amount)
@@ -240,4 +216,5 @@ public class CommonBeing extends Being {
         System.out.println(other.Name+" meet "+ this.Name +" and exchange "+ amount+ " messages.");
         return other.messages;
     }
+
 }
