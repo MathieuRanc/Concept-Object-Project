@@ -9,11 +9,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class MasterBeing extends Being {
-
-    private ArrayList<CommonBeing> commonBeings = new ArrayList<>();
+    private final ArrayList<CommonBeing> commonBeings = new ArrayList<>();
 
     protected Tile _actualTile;
-    public MasterBeing(Map map, ZoneTypes zoneType, String[] messageOfCommons)
+    public MasterBeing(String name,Map map, ZoneTypes zoneType, String[] messageOfCommons)
     {
         super(map,zoneType);
 
@@ -24,12 +23,13 @@ public class MasterBeing extends Being {
         //Setting simulationobject data
         graphObj = t;
         objectType= zoneType;
+        Name = name;
 
         _actualTile = map.GetFreeRandomMapTileOfType(zoneType);
         _actualTile.SetTileObject(this,zoneType);
 
         for (int i = 0; i < 3; i++) {
-            commonBeings.add(new CommonBeing(this,map,zoneType,messageOfCommons[i]));
+            commonBeings.add(new CommonBeing(name+"_CommonBeing"+ i,this,map,zoneType,messageOfCommons[i]));
         }
     }
 

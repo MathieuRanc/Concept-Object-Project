@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class CommonBeing extends Being {
+
     private int energyPoints = 100;
     private int maxNumberOfMessages = 20;
     private int numberOfMessages = 0;
@@ -22,7 +23,7 @@ public class CommonBeing extends Being {
     private float _energyPointspLosingStep = 1;
     private float _energyPoints ;
 
-    public CommonBeing(MasterBeing master ,Map map, ZoneTypes zoneType, String initMessage)
+    public CommonBeing(String name, MasterBeing master , Map map, ZoneTypes zoneType, String initMessage)
     {
         super(map,zoneType);
         messages.add(initMessage);
@@ -33,6 +34,7 @@ public class CommonBeing extends Being {
         graphObj = t;
         objectType = zoneType;
 
+        Name=name;
         _energyPoints = _maxEnergyPoints;
         _master = master;
         _actualTile = map.GetFreeRandomMapTileOfType(zoneType);
@@ -55,7 +57,7 @@ public class CommonBeing extends Being {
             {
                 overrideTest++;
 
-                Direction rndDirection = _energyPoints/_maxEnergyPoints < 0.2f ? Direction.GetOrientedDirection(_master._actualTile,movementTile):Direction.GetRandomDirection();
+                Direction rndDirection = _energyPoints/_maxEnergyPoints < 0.2f ? Direction.GetOrientedDirection(_map.GetFreeRandomMapTileOfType(objectType),movementTile):Direction.GetRandomDirection();
                 Tile tileToTest = _map.GetDirectNeighbour(movementTile,rndDirection.relativPos);
 
                 if(lastTile == tileToTest || tileToTest == null) {
@@ -89,9 +91,9 @@ public class CommonBeing extends Being {
                             var meetedBeing = (Being)tileToTest.GetTileObject();
                             if(meetedBeing.isEnnemy(this))//EnnemyTeam
                             {
-                                //fight
-                                Random isWin = new Random();
-                                if(isWin.nextBoolean())
+                                //Combat si ennemie
+
+                                if(random.nextBoolean())
                                 {   // you win a random number of messages from your opponent
                                     for( int j = 0; j < new Random().nextInt(meetedBeing.messages.size())+1; j++)
                                     {
@@ -114,14 +116,14 @@ public class CommonBeing extends Being {
                                     if (meetedBeing instanceof MasterBeing) { //isMaster
                                         MasterBeing masterBeing = (MasterBeing) meetedBeing;
                                                                         //isMaster
-                                    masterBeing.messages.addAll(messages);
-                                    removeDuplicates(masterBeing.messages);
-                                    messages.clear();
+                                        masterBeing.messages.addAll(messages);
+                                        removeDuplicates(masterBeing.messages);
+                                        messages.clear();
                                     }
                                     else //isCommon
                                     {
                                         CommonBeing commonBeing = (CommonBeing) meetedBeing;
-                                        messages = commonBeing.ExchangeMessages(messages, meetedBeing.objectType == this.objectType? 0 : random.nextInt(2));
+                                        messages = commonBeing.ExchangeMessages(this, meetedBeing.objectType == this.objectType? 0 : random.nextInt(2));
                                     }
                                 }
                             break;
@@ -185,7 +187,7 @@ public class CommonBeing extends Being {
         }
         return true;
     }
-    private ArrayList<String> ExchangeMessages(ArrayList<String> messages, int amount)
+    private ArrayList<String> ExchangeMessages(CommonBeing other, int amount)
     {
         Random random = new Random();
 
@@ -197,7 +199,7 @@ public class CommonBeing extends Being {
             {
                 if(countSelf < amount)
                 {
-                    String newMessage = messages.get(random.nextInt(messages.size()));
+                    String newMessage = other.messages.get(random.nextInt(other.messages.size()));
                     if(!this.messages.contains(newMessage))
                     {
                         this.messages.add(newMessage);
@@ -207,9 +209,9 @@ public class CommonBeing extends Being {
                 else if(countOther <amount)
                 {
                     String newMessage = this.messages.get(random.nextInt(this.messages.size()));
-                    if(!messages.contains(newMessage))
+                    if(!other.messages.contains(newMessage))
                     {
-                        messages.add(newMessage);
+                        other.messages.add(newMessage);
                         countOther++;
                     }
                 }
@@ -217,7 +219,7 @@ public class CommonBeing extends Being {
         }
         else // On echange tout les messages
         {
-            for(var message : messages) // for self
+            for(var message : other.messages) // for self
             {
                 if(!this.messages.contains(message))
                 {
@@ -225,15 +227,17 @@ public class CommonBeing extends Being {
                 }
             }
 
-            for(var message : this.messages) // for self
+            for(var message : this.messages) // for other
             {
-                if(!messages.contains(message))
+                if(!other.messages.contains(message))
                 {
-                    messages.add(message);
+                    other.messages.add(message);
                 }
             }
         }
 
-        return messages;
+        amount = amount==0? other.messages.size():amount;
+        System.out.println(other.Name+" meet "+ this.Name +" and exchange "+ amount+ " messages.");
+        return other.messages;
     }
 }

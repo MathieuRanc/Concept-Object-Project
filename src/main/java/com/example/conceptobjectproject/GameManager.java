@@ -11,6 +11,7 @@ import javafx.stage.Stage;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Iterator;
 
 public class GameManager extends Application {
 
@@ -53,11 +54,14 @@ public class GameManager extends Application {
                     Collections.shuffle(_masters);
                     for(var master : _masters)
                     {
+                        if(master.messages.toArray() == allGameMessages) // test end of the game
+                            stage.close();
 
-                        for(var common : master.GetCommonBeings())
-                        {
-                            common.move();
+                        Iterator<CommonBeing> commons = master.GetCommonBeings().iterator();
+                        while (commons.hasNext()) {
+                            commons.next().move();
                         }
+
                     }
 
                     lastUpdate = now ;
@@ -70,13 +74,12 @@ public class GameManager extends Application {
     }
 
     private void InitGame() {
-        String[] messagesToGive = allGameMessages;
 
         _masters = new ArrayList<>();
-        _masters.add(new MasterBeing(_map, ZoneTypes.SafeZoneTeam1, Arrays.copyOfRange(allGameMessages, 0, 3)));
-        _masters.add(new MasterBeing(_map, ZoneTypes.SafeZoneTeam2, Arrays.copyOfRange(allGameMessages, 3, 6)));
-        _masters.add(new MasterBeing(_map, ZoneTypes.SafeZoneTeam3, Arrays.copyOfRange(allGameMessages, 6, 9)));
-        _masters.add(new MasterBeing(_map, ZoneTypes.SafeZoneTeam4, Arrays.copyOfRange(allGameMessages, 9, 12)));
+        _masters.add(new MasterBeing("Master1",_map, ZoneTypes.SafeZoneTeam1, Arrays.copyOfRange(allGameMessages, 0, 3)));
+        _masters.add(new MasterBeing("Master2",_map, ZoneTypes.SafeZoneTeam2, Arrays.copyOfRange(allGameMessages, 3, 6)));
+        _masters.add(new MasterBeing("Master3",_map, ZoneTypes.SafeZoneTeam3, Arrays.copyOfRange(allGameMessages, 6, 9)));
+        _masters.add(new MasterBeing("Master4",_map, ZoneTypes.SafeZoneTeam4, Arrays.copyOfRange(allGameMessages, 9, 12)));
 
         GenerateObstacles(10);
     }

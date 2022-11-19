@@ -9,6 +9,7 @@ import java.util.Random;
 
 public class Being extends SimulationObject {
 
+    public String Name;
     protected final Map _map;
     protected final ZoneTypes _team;
     protected Tile _actualTile;
