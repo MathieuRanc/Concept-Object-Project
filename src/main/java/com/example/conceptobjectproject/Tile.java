@@ -50,7 +50,7 @@ public class Tile {
         if(zoneType.equals(ZoneTypes.SafeZoneTeam1))
             return Color.LIGHTCORAL;
         if(zoneType.equals(ZoneTypes.SafeZoneTeam2))
-            return Color.PALEVIOLETRED;
+            return Color.YELLOW;
         if(zoneType.equals(ZoneTypes.SafeZoneTeam3))
             return Color.LIGHTGREEN;
         else
