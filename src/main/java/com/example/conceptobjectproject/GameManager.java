@@ -44,7 +44,7 @@ public class GameManager extends Application {
             public void handle(long now) {
                 if (now - lastUpdate >= 1000_000_000) {
 
-                    // System.out.print("\033[H\033[2J");
+                    System.out.print("\033[H\033[2J");
                     System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
 
                     // Collections.shuffle(_masters);
